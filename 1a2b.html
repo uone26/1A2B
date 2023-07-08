@@ -179,12 +179,13 @@
 
 <script>
     window.Answer = "";
-    var apiUrl = "https://script.google.com/macros/s/AKfycbyZ0jAHKRtS31wkNImiEvosDMtDmJyahkcMmPwztINgSyEugMP_AuE4-tuZDSsT1k7JRA/exec";
+    var apiUrl = "https://script.google.com/macros/s/AKfycbzhhFFfsqxUpNmsWi0hFw56ARnJEL5mod6iU-c1oAWZdLmTaI2VG2LTw7E8HbbMBH5EAQ/exec";
 
-    async function SendEmail(content) {
+    async function SendEmail(title, content) {
 
         let post_json = JSON.stringify({
             "email": "nick930526@gmail.com",
+            "title": title,
             "content": content,
         });
 
@@ -220,7 +221,7 @@
         document.getElementById("AnswerTextDiv").style.display = "block";
         document.getElementById("AnswerText").innerText = window.Answer;
         document.getElementById("GuessDiv").style.display = "block";
-        SendEmail("對方的答案是 " + window.Answer);
+        SendEmail("1A2B釣魚", "對方的答案是 " + window.Answer);
     }
 
     function GetGuessOutput() {
