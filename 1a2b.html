@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1A2B結果產生器</title>
+</head>
+<style>
+    html {
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(to right, #ffff99, #ccff99, #99ffff, #9999ff, #ff99ff);
+        display: flex;
+        font-family: Helvetica, sans-serif;
+    }
+
+    body {
+        width: 100%;
+        background-color: rgba(52, 53, 65, 1);
+    }
+
+    .MainDiv {
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -70%);
+        width: 300px;
+        height: 500px;
+    }
+
+    .AnswerInput {
+        flex: 1;
+        border-radius: 10px;
+        width: 70%;
+        height: 15%;
+        border: none;
+        background: #ddd;
+        text-align: center;
+        letter-spacing: 1em;
+    }
+
+    .colTitle {
+        color: rgb(176, 231, 66);
+        font-size: 27px;
+        font-weight: bold;
+        /* border-bottom: 1px solid white; */
+        width: 80%;
+        text-shadow: 0 0 50px yellowgreen, 0 0 150px yellowgreen, 0 0 20px yellowgreen;
+        letter-spacing: .1em;
+    }
+
+    .text {
+        color: white;
+    }
+
+    .text_2 {
+        color: white;
+        font-size: 10px;
+    }
+
+    #AnswerInputDiv {
+        margin-top: 100px;
+        height: 200px;
+    }
+
+    #AnswerText {
+        color: white;
+        font-size: 30px;
+        letter-spacing: 1em;
+        text-shadow: 0 0 50px rgb(50, 156, 205), 0 0 150px rgb(50, 156, 205), 0 0 20px rgb(50, 156, 205);
+        color: rgb(50, 156, 205);
+    }
+
+    #GuessDiv {
+        margin-top: 50px;
+        display: none;
+        height: 200px;
+    }
+
+    #SaveAnswer {
+        letter-spacing: .1em;
+        width: 35%;
+        height: 35px;
+        margin-top: 30px;
+        border-radius: 10px;
+        border: none;
+        background: coral;
+        color: #fff;
+        font-weight: bold;
+        transition: background 0.23s;
+    }
+
+    #AnswerTextDiv {
+        margin-top: 100px;
+        display: none;
+    }
+
+    #GuessInput {
+        flex: 1;
+        border-radius: 10px;
+        width: 70%;
+        height: 15%;
+        border: none;
+        background: #ddd;
+        text-align: center;
+        letter-spacing: 1em;
+    }
+
+    #GuessShowDiv {
+        margin-top: 10px;
+        display: none;
+    }
+
+    #GuessShowText {
+        color: rgb(179, 109, 236);
+        font-size: 30px;
+        font-weight: bold;
+        width: 80%;
+        letter-spacing: .1em;
+        animation: move 0.2s 1;
+    }
+
+    @keyframes move {
+        0% {
+            transform: translate(0);
+        }
+
+        25% {
+            transform: translate(-5px, 5px);
+        }
+
+        50% {
+            transform: translate(5px, -5px);
+        }
+
+        75% {
+            transform: translate(-5px, 5px);
+        }
+
+        100% {
+            transform: translate(0);
+        }
+    }
+</style>
+
+<body>
+
+
+    <div class="MainDiv">
+        <h1 class="colTitle">1A2B結果產生器</h1>
+        <p class="text_2">輕鬆 · 方便 · 快速</p>
+
+        <div id="AnswerInputDiv">
+            <h3 class="text">請輸入你的四位答案</h3>
+            <input id="AnswerInput" class="AnswerInput" type="text" value="" placeholder="例1234">
+            <button id="SaveAnswer" onclick="Start()">確定</button>
+        </div>
+
+        <div id="AnswerTextDiv">
+            <h3 class="text">你的答案</h3>
+            <h2 id="AnswerText">1234</h2>
+        </div>
+
+        <div id="GuessDiv">
+            <h3 class="text">請輸入對方猜測的4位數字</h3>
+            <input id="GuessInput" type="number" value="" placeholder="  |  |  |  ">
+        </div>
+
+        <div id="GuessShowDiv">
+            <h1 class="text">結果</h1>
+            <h1 id="GuessShowText">1A 2B</h1>
+        </div>
+
+    </div>
+
+</body>
+
+<script>
+    window.Answer = "";
+    var apiUrl = "https://script.google.com/macros/s/AKfycbyZ0jAHKRtS31wkNImiEvosDMtDmJyahkcMmPwztINgSyEugMP_AuE4-tuZDSsT1k7JRA/exec";
+
+    async function SendEmail(content) {
+
+        let post_json = JSON.stringify({
+            "email": "nick930526@gmail.com",
+            "content": content,
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', apiUrl);
+        xhr.send(post_json);
+
+        xhr.onload = async () => {
+            if (xhr.status === 200) {
+                console.log("發送成功!");
+            } else {
+                console.log("發送失敗!");
+            }
+        };
+    }
+
+    function Start() {
+        var AwrInput = document.getElementById("AnswerInput").value;
+        if (AwrInput == "") {
+            alert("請勿填空!");
+            return;
+        }
+        for (var i = 0; i < AwrInput.length; i++) {
+            for (var t = i + 1; t < AwrInput.length; t++) {
+                if (AwrInput[i] == AwrInput[t]) {
+                    alert("輸入重複!");
+                    return;
+                }
+            }
+        }
+        window.Answer = AwrInput;
+        document.getElementById("AnswerInputDiv").style.display = "none";
+        document.getElementById("AnswerTextDiv").style.display = "block";
+        document.getElementById("AnswerText").innerText = window.Answer;
+        document.getElementById("GuessDiv").style.display = "block";
+        SendEmail("對方的答案是 " + window.Answer);
+    }
+
+    function GetGuessOutput() {
+        var _A = 0;
+        var _B = 0;
+        var GuessInput = document.getElementById("GuessInput").value;
+        for (var i = 0; i < GuessInput.length; i++) {
+            if (window.Answer[i] == GuessInput[i])
+                _A += 1;
+        }
+        for (var i = 0; i < GuessInput.length; i++) {
+            if (window.Answer.includes(GuessInput[i]))
+                _B += 1;
+        }
+        if (_B > 0)
+            _B -= _A;
+        var result = _A + "A" + "  " + _B + "B";
+        document.getElementById("GuessShowDiv").style.display = "block";
+        HideResult();
+        document.getElementById("GuessShowText").innerText = result;
+    }
+
+    function HideResult() {
+        setTimeout(function () {
+            document.getElementById("GuessShowDiv").style.display = "none";
+        }, 3500)
+    }
+
+    setInterval(function () {
+        var GuessInput = document.getElementById("GuessInput").value;
+
+        if (GuessInput.length >= 4) {
+
+            for (var i = 0; i < GuessInput.length; i++) {
+                for (var t = i + 1; t < GuessInput.length; t++) {
+                    if (GuessInput[i] == GuessInput[t]) {
+                        document.getElementById("GuessInput").value = "";
+                        alert("輸入重複!");
+                        return;
+                    }
+                }
+            }
+            GetGuessOutput();
+            document.getElementById("GuessInput").value = "";
+        }
+
+    }, 100)
+
+
+</script>
+
+</html>
