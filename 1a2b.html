@@ -88,9 +88,9 @@
 
     #SaveAnswer {
         letter-spacing: .1em;
-        width: 35%;
+        width: 25%;
         height: 35px;
-        margin-top: 30px;
+        margin-top: 20px;
         border-radius: 10px;
         border: none;
         background: coral;
@@ -237,6 +237,11 @@
             margin-left: 0px;
         }
     }
+
+    input,
+    textarea {
+        font-size: initial;
+    }
 </style>
 
 <body>
@@ -255,14 +260,17 @@
         <div id="AnswerInputDiv">
             <h3 class="text">請輸入你的四位答案</h3>
             <input id="AnswerInput" class="AnswerInput" type="text" value="" placeholder="例1234">
-            <button id="SaveAnswer" onclick="Start()">確定</button>
+            <div>
+                <button id="SaveAnswer" onclick="Start()">確定</button>
+
+            </div>
         </div>
 
         <div id="AnswerTextDiv">
             <h3 class="text">你的答案</h3>
             <img onclick="HideAnswer()"
-                style="width: 16px; height: 16px; position: absolute; left: 65%; margin-top: 12px;"
-                src="https://uone1661.github.io/1A2B/Image/eye-2-xxl" alt="">
+                style="width: 16px; height: 16px; position: absolute; left: 60%; margin-top: 12px;"
+                src="https://uone1661.github.io/1A2B/Image/eye-2-xxl.png" alt="">
             <h2 id="AnswerText">1234</h2>
         </div>
 
@@ -281,6 +289,7 @@
 
 <script>
     window.Answer = "";
+    var Sound_1_IsPlay = false;
 
     async function SendEmail(title, content) {
         var apiUrl = "https://script.google.com/macros/s/AKfycbzhhFFfsqxUpNmsWi0hFw56ARnJEL5mod6iU-c1oAWZdLmTaI2VG2LTw7E8HbbMBH5EAQ/exec";
@@ -368,10 +377,13 @@
         document.getElementById("GuessShowDiv").style.display = "block";
         setTimeout(HideResult, 3000);
         document.getElementById("GuessShowText").innerText = result;
-        // if (_A > 0 || _B > 0)
-        //     playSound("https://soundeffect-lab.info/sound/voice/mp3/people/people-shout-oo1.mp3");
-        // else
-        //     playSound("https://soundeffect-lab.info/sound/anime/mp3/stupid4.mp3");
+
+        if (_A >= 3 && !Sound_1_IsPlay){
+            playSound("https://soundeffect-lab.info/sound/anime/mp3/mens-yeah1.mp3");
+            Sound_1_IsPlay = true;
+        }
+        if (_A + _B == 0)
+            playSound("http://yinxiao.org/sxshare/sdsd8130117161102/freesound/yinxiao.org_5217718140817181754837418.mp3");
     }
 
     function HideResult() {
